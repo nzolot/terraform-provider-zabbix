@@ -5,7 +5,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/claranet/go-zabbix-api"
+	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/logging"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"

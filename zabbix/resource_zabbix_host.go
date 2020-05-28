@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/claranet/go-zabbix-api"
+	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -103,6 +103,12 @@ func resourceZabbixHost() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 			},
+            "macro": &schema.Schema{
+                Type:        schema.TypeMap,
+                Elem:        &schema.Schema{Type: schema.TypeString},
+                Optional:    true,
+                Description: "User macros for the host.",
+            },
 		},
 	}
 }
@@ -272,6 +278,7 @@ func createHostObj(d *schema.ResourceData, api *zabbix.API) (*zabbix.Host, error
 		Host:   d.Get("host").(string),
 		Name:   d.Get("name").(string),
 		Status: 0,
+		UserMacros: createZabbixMacro(d),
 	}
 
 	//0 is monitored, 1 - unmonitored host
@@ -302,6 +309,10 @@ func createHostObj(d *schema.ResourceData, api *zabbix.API) (*zabbix.Host, error
 	}
 
 	host.TemplateIDs = templates
+
+    if host.UserMacros == nil {
+        host.UserMacros = zabbix.Macros{}
+    }
 	return &host, nil
 }
 

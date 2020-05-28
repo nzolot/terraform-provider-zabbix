@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/claranet/go-zabbix-api"
+	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 

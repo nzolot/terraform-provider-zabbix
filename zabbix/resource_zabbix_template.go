@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	"github.com/claranet/go-zabbix-api"
+	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
@@ -54,20 +54,6 @@ func resourceZabbixTemplate() *schema.Resource {
 			},
 		},
 	}
-}
-
-func createZabbixMacro(d *schema.ResourceData) zabbix.Macros {
-	var macros zabbix.Macros
-
-	terraformMacros := d.Get("macro").(map[string]interface{})
-	for i, terraformMacro := range terraformMacros {
-		macro := zabbix.Macro{
-			MacroName: fmt.Sprintf("{$%s}", i),
-			Value:     terraformMacro.(string),
-		}
-		macros = append(macros, macro)
-	}
-	return macros
 }
 
 func createLinkedTemplate(d *schema.ResourceData) zabbix.Templates {
