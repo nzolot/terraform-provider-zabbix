@@ -29,12 +29,13 @@ const (
 // Host represent Zabbix host object
 // https://www.zabbix.com/documentation/3.2/manual/api/reference/host/object
 type Host struct {
-	HostID    string        `json:"hostid,omitempty"`
-	Host      string        `json:"host"`
-	Available AvailableType `json:"available,string"`
-	Error     string        `json:"error"`
-	Name      string        `json:"name"`
-	Status    StatusType    `json:"status,string"`
+	HostID     string        `json:"hostid,omitempty"`
+	Host       string        `json:"host"`
+	Available  AvailableType `json:"available,string"`
+	Error      string        `json:"error"`
+	Name       string        `json:"name"`
+	Status     StatusType    `json:"status,string"`
+	UserMacros Macros        `json:"macros"`
 
 	// Fields below used only when creating hosts
 	GroupIds    HostGroupIDs   `json:"groups,omitempty"`
@@ -71,7 +72,7 @@ func (api *API) HostsGetByHostGroups(hostGroups HostGroups) (res Hosts, err erro
 
 // HostGetByID Gets host by Id only if there is exactly 1 matching host.
 func (api *API) HostGetByID(id string) (res *Host, err error) {
-	hosts, err := api.HostsGet(Params{"hostids": id})
+	hosts, err := api.HostsGet(Params{"hostids": id,"selectMacros": "extend"})
 	if err != nil {
 		return
 	}
@@ -87,7 +88,7 @@ func (api *API) HostGetByID(id string) (res *Host, err error) {
 
 // HostGetByHost Gets host by Host only if there is exactly 1 matching host.
 func (api *API) HostGetByHost(host string) (res *Host, err error) {
-	hosts, err := api.HostsGet(Params{"filter": map[string]string{"host": host}})
+	hosts, err := api.HostsGet(Params{"filter": map[string]string{"host": host},"selectMacros": "extend"})
 	if err != nil {
 		return
 	}
