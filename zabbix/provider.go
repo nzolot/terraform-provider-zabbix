@@ -35,6 +35,7 @@ func Provider() terraform.ResourceProvider {
 
 		DataSourcesMap: map[string]*schema.Resource{
 			"zabbix_server": dataSourceZabbixServer(),
+			"zabbix_host" : dataSourceZabbixHost(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{

@@ -113,7 +113,7 @@ func resourceZabbixHost() *schema.Resource {
 	}
 }
 
-func getInterfaces(d *schema.ResourceData) (zabbix.HostInterfaces, error) {
+func createInterfacesObj    (d *schema.ResourceData) (zabbix.HostInterfaces, error) {
 	interfaceCount := d.Get("interfaces.#").(int)
 
 	interfaces := make(zabbix.HostInterfaces, interfaceCount)
@@ -294,7 +294,7 @@ func createHostObj(d *schema.ResourceData, api *zabbix.API) (*zabbix.Host, error
 
 	host.GroupIds = hostGroups
 
-	interfaces, err := getInterfaces(d)
+	interfaces, err := createInterfacesObj(d)
 
 	if err != nil {
 		return nil, err
@@ -334,6 +334,7 @@ func resourceZabbixHostCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	log.Printf("[DEBUG] Created host id is %s", hosts[0].HostID)
+	log.Printf("[DEBUG] All data for host %s", hosts[0])
 
 	d.Set("host_id", hosts[0].HostID)
 	d.SetId(hosts[0].HostID)
@@ -361,6 +362,7 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 
 	params := zabbix.Params{
 		"output": "extend",
+		"selectInterfaces" : "extend",
 		"hostids": []string{
 			d.Id(),
 		},
