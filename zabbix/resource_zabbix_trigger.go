@@ -28,6 +28,23 @@ func resourceZabbixTrigger() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 			},
+			"recovery_mode": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  0,
+				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
+					v := val.(int)
+					if v < 0 || v > 2 {
+						errs = append(errs, fmt.Errorf("%q, must be between 0 and 2 inclusive, got %d", key, v))
+					}
+					return
+				},
+			},
+			"recovery_expression": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "",
+			},
 			"comment": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
@@ -94,6 +111,10 @@ func resourceZabbixTriggerRead(d *schema.ResourceData, meta interface{}) error {
 	log.Printf("[DEBUG] trigger expression: %s", trigger.Expression)
 	d.Set("description", trigger.Description)
 	d.Set("expression", trigger.Expression)
+
+    d.Set("recovery_mode", trigger.RecoveryMode)
+    d.Set("recovery_expression", trigger.RecoveryExpression)
+
 	if trigger.Comments != "" {
 		d.Set("comment", trigger.Comments)
 	}
@@ -155,12 +176,14 @@ func createTriggerDependencies(d *schema.ResourceData) zabbix.Triggers {
 
 func createTriggerObj(d *schema.ResourceData) zabbix.Trigger {
 	return zabbix.Trigger{
-		Description:  d.Get("description").(string),
-		Expression:   d.Get("expression").(string),
-		Comments:     d.Get("comment").(string),
-		Priority:     zabbix.SeverityType(d.Get("priority").(int)),
-		Status:       zabbix.StatusType(d.Get("status").(int)),
-		Dependencies: createTriggerDependencies(d),
+		Description:        d.Get("description").(string),
+		Expression:         d.Get("expression").(string),
+		RecoveryMode:       d.Get("recovery_mode").(int),
+		RecoveryExpression: d.Get("recovery_expression").(string),
+		Comments:           d.Get("comment").(string),
+		Priority:           zabbix.SeverityType(d.Get("priority").(int)),
+		Status:             zabbix.StatusType(d.Get("status").(int)),
+		Dependencies:       createTriggerDependencies(d),
 	}
 }
 
@@ -186,6 +209,7 @@ func getTriggerExpression(trigger *zabbix.Trigger, api *zabbix.API) error {
 		idstr := fmt.Sprintf("{%s}", function.FunctionID)
 		expendValue := fmt.Sprintf("{%s:%s.%s(%s)}", item.ItemParent[0].Host, item.Key, function.Function, function.Parameter)
 		trigger.Expression = strings.Replace(trigger.Expression, idstr, expendValue, 1)
+		trigger.RecoveryExpression = strings.Replace(trigger.RecoveryExpression, idstr, expendValue, 1)
 	}
 	return nil
 }
