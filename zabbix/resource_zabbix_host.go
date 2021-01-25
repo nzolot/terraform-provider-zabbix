@@ -22,12 +22,12 @@ var interfaceSchema *schema.Resource = &schema.Resource{
 		"dns": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
-			ForceNew: true,
+			//ForceNew: true,
 		},
 		"ip": &schema.Schema{
 			Type:     schema.TypeString,
 			Optional: true,
-			ForceNew: true,
+			//ForceNew: true,
 		},
 		"main": &schema.Schema{
 			Type:     schema.TypeBool,
@@ -38,7 +38,7 @@ var interfaceSchema *schema.Resource = &schema.Resource{
 			Type:     schema.TypeString,
 			Optional: true,
 			Default:  "10050",
-			ForceNew: true,
+			//ForceNew: true,
 		},
 		"type": &schema.Schema{
 			Type:     schema.TypeString,
