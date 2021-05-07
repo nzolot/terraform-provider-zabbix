@@ -97,6 +97,13 @@ resource "zabbix_host" "zabbix1" {
     ip = "127.0.0.1"
     main = true
   }
+  tags = {
+    env = "dev"
+    role = "zabbix server"
+  }
+  macro = {
+    MACRO_NAME = "12"
+  }
   groups = ["Linux servers", "${zabbix_host_group.zabbix.name}"]
   templates = ["Template ICMP Ping"]
 }
