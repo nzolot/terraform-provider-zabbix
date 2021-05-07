@@ -3,10 +3,9 @@ package zabbix
 import (
 	"errors"
 	"fmt"
-	"log"
-
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/zxzharmlesszxz/go-zabbix-api"
+	"log"
 )
 
 // HostInterfaceTypes zabbix different interface type
@@ -52,6 +51,15 @@ var interfaceSchema *schema.Resource = &schema.Resource{
 			ForceNew: true,
 		},
 	},
+}
+
+func createTerraformTag(host *zabbix.Host) (map[string]interface{}, error) {
+	terraformTags := make(map[string]interface{}, len(host.Tags))
+
+	for _, tag := range host.Tags {
+		terraformTags[tag.TagName] = tag.Value
+	}
+	return terraformTags, nil
 }
 
 func resourceZabbixHost() *schema.Resource {
@@ -103,17 +111,23 @@ func resourceZabbixHost() *schema.Resource {
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 			},
-            "macro": &schema.Schema{
-                Type:        schema.TypeMap,
-                Elem:        &schema.Schema{Type: schema.TypeString},
-                Optional:    true,
-                Description: "User macros for the host.",
-            },
+			"tags": &schema.Schema{
+				Type:        schema.TypeMap,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "Tags for host.",
+			},
+			"macro": &schema.Schema{
+				Type:        schema.TypeMap,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "User macros for the host.",
+			},
 		},
 	}
 }
 
-func createInterfacesObj    (d *schema.ResourceData) (zabbix.HostInterfaces, error) {
+func createInterfacesObj(d *schema.ResourceData) (zabbix.HostInterfaces, error) {
 	interfaceCount := d.Get("interfaces.#").(int)
 
 	interfaces := make(zabbix.HostInterfaces, interfaceCount)
@@ -275,10 +289,11 @@ func getTemplates(d *schema.ResourceData, api *zabbix.API) (zabbix.TemplateIDs, 
 
 func createHostObj(d *schema.ResourceData, api *zabbix.API) (*zabbix.Host, error) {
 	host := zabbix.Host{
-		Host:   d.Get("host").(string),
-		Name:   d.Get("name").(string),
-		Status: 0,
+		Host:       d.Get("host").(string),
+		Name:       d.Get("name").(string),
+		Status:     0,
 		UserMacros: createZabbixMacro(d),
+		Tags:       createZabbixTag(d),
 	}
 
 	//0 is monitored, 1 - unmonitored host
@@ -310,9 +325,13 @@ func createHostObj(d *schema.ResourceData, api *zabbix.API) (*zabbix.Host, error
 
 	host.TemplateIDs = templates
 
-    if host.UserMacros == nil {
-        host.UserMacros = zabbix.Macros{}
-    }
+	if host.Tags == nil {
+		host.Tags = zabbix.Tags{}
+	}
+
+	if host.UserMacros == nil {
+		host.UserMacros = zabbix.Macros{}
+	}
 	return &host, nil
 }
 
@@ -334,7 +353,7 @@ func resourceZabbixHostCreate(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	log.Printf("[DEBUG] Created host id is %s", hosts[0].HostID)
-	log.Printf("[DEBUG] All data for host %s", hosts[0])
+	log.Printf("[DEBUG] All data for host %s", hosts[0].Host)
 
 	d.Set("host_id", hosts[0].HostID)
 	d.SetId(hosts[0].HostID)
@@ -361,8 +380,9 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("monitored", host.Status == 0)
 
 	params := zabbix.Params{
-		"output": "extend",
-		"selectInterfaces" : "extend",
+		"output":           "extend",
+		"selectInterfaces": "extend",
+		"selectTags":       "extend",
 		"hostids": []string{
 			d.Id(),
 		},
@@ -395,6 +415,12 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	d.Set("groups", groupNames)
+	terraformTags, err := createTerraformTag(host)
+	log.Printf("[DEBUG] Host tags is %s", host.Tags)
+	if err != nil {
+		return err
+	}
+	d.Set("tags", terraformTags)
 
 	return nil
 }

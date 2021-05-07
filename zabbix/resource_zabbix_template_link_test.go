@@ -5,10 +5,10 @@ import (
 	"log"
 	"testing"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"github.com/zxzharmlesszxz/go-zabbix-api"
 )
 
 func TestAccZabbixTemplateLink_Basic(t *testing.T) {
