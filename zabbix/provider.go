@@ -18,18 +18,24 @@ func Provider() terraform.ResourceProvider {
 		Schema: map[string]*schema.Schema{
 			"user": &schema.Schema{
 				Type:        schema.TypeString,
-				Required:    true,
+				Required:    false,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ZABBIX_USER", nil),
+				Default:     "undef",
 			},
 			"password": &schema.Schema{
 				Type:        schema.TypeString,
-				Required:    true,
+				Required:    false,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ZABBIX_PASSWORD", nil),
+				Default:     "undef",
 			},
 			"server_url": &schema.Schema{
 				Type:        schema.TypeString,
-				Required:    true,
+				Required:    false,
+				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ZABBIX_SERVER_URL", nil),
+				Default:     "http://zabbix.nikospace.net/api_mock.php",
 			},
 		},
 
