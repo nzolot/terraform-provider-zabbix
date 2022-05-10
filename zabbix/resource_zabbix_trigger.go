@@ -7,6 +7,7 @@ import (
 
 	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/mcuadros/go-version"
 )
 
 func resourceZabbixTrigger() *schema.Resource {
@@ -207,9 +208,19 @@ func getTriggerExpression(trigger *zabbix.Trigger, api *zabbix.API) error {
 			return fmt.Errorf("Expected one parent host for item with id %s, and got : %d", function.ItemID, len(item.ItemParent))
 		}
 		idstr := fmt.Sprintf("{%s}", function.FunctionID)
-		expendValue := fmt.Sprintf("{%s:%s.%s(%s)}", item.ItemParent[0].Host, item.Key, function.Function, function.Parameter)
-		trigger.Expression = strings.Replace(trigger.Expression, idstr, expendValue, 1)
-		trigger.RecoveryExpression = strings.Replace(trigger.RecoveryExpression, idstr, expendValue, 1)
+
+        apiVersion, err := api.Version()
+        log.Printf("[DEBUG] apiVersion: %s", apiVersion)
+
+        if version.Compare(apiVersion, "5.4", ">=") {
+            expendValue := fmt.Sprintf("%s(%s)", function.Function, strings.Replace(function.Parameter, "$", "/" + item.ItemParent[0].Host + "/" + item.Key, 1))
+            trigger.Expression = strings.ReplaceAll(trigger.Expression, idstr, expendValue)
+            trigger.RecoveryExpression = strings.ReplaceAll(trigger.RecoveryExpression, idstr, expendValue)
+        } else {
+            expendValue := fmt.Sprintf("{%s:%s.%s(%s)}", item.ItemParent[0].Host, item.Key, function.Function, function.Parameter)
+            trigger.Expression = strings.ReplaceAll(trigger.Expression, idstr, expendValue)
+            trigger.RecoveryExpression = strings.ReplaceAll(trigger.RecoveryExpression, idstr, expendValue)
+        }
 	}
 	return nil
 }
