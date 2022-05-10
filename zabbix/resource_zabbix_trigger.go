@@ -127,9 +127,12 @@ func resourceZabbixTriggerRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	var dependencies []string
+	log.Printf("[DEBUG] var dependencies: %s", dependencies)
 	for _, dependencie := range trigger.Dependencies {
+		log.Printf("[DEBUG] loop dependencies: %s", dependencies)
 		dependencies = append(dependencies, dependencie.TriggerID)
 	}
+	log.Printf("[DEBUG] loop end dependencies: %s", dependencies)
 	d.Set("dependencies", dependencies)
 	return nil
 }
@@ -164,9 +167,9 @@ func resourceZabbixTriggerDelete(d *schema.ResourceData, meta interface{}) error
 	return deleteRetry(d.Id(), getTriggerParentID, api.TriggersDeleteIDs, api)
 }
 
-func createTriggerDependencies(d *schema.ResourceData) zabbix.Triggers {
+func createTriggerDependencies(d *schema.ResourceData) zabbix.DependencyTriggers {
 	size := d.Get("dependencies.#").(int)
-	dependencies := make(zabbix.Triggers, size)
+	dependencies := make(zabbix.DependencyTriggers, size)
 
 	terraformDependencies := d.Get("dependencies").(*schema.Set)
 	for i, terraformDependencie := range terraformDependencies.List() {
