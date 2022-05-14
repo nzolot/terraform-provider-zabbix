@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"strings"
 
 	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -362,6 +363,7 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 
 	params := zabbix.Params{
 		"output": "extend",
+		"selectMacros": "extend",
 		"selectInterfaces" : "extend",
 		"hostids": []string{
 			d.Id(),
@@ -395,6 +397,12 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	}
 
 	d.Set("groups", groupNames)
+
+    terraformMacros, err := createTerraformMacroHost(host)
+    if err != nil {
+        return err
+    }
+    d.Set("macro", terraformMacros)
 
 	return nil
 }
@@ -431,4 +439,24 @@ func resourceZabbixHostDelete(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*zabbix.API)
 
 	return api.HostsDeleteByIds([]string{d.Id()})
+}
+
+func createTerraformMacroHost(host *zabbix.Host) (map[string]interface{}, error) {
+	terraformMacros := make(map[string]interface{}, len(host.UserMacros))
+
+	for _, macro := range host.UserMacros {
+		var name string
+		if noPrefix := strings.Split(macro.MacroName, "{$"); len(noPrefix) == 2 {
+			name = noPrefix[1]
+		} else {
+			return nil, fmt.Errorf("Invalid macro name \"%s\"", macro.MacroName)
+		}
+		if noSuffix := strings.Split(name, "}"); len(noSuffix) == 2 {
+			name = noSuffix[0]
+		} else {
+			return nil, fmt.Errorf("Invalid macro name \"%s\"", macro.MacroName)
+		}
+		terraformMacros[name] = macro.Value
+	}
+	return terraformMacros, nil
 }
