@@ -1,26 +1,26 @@
 package zabbix
 
 import (
-    //"errors"
+	"encoding/json"
+	//"errors"
 	"fmt"
 	"log"
-    //"strings"
+	//"strings"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nzolot/go-zabbix-api"
 	//"github.com/mcuadros/go-version"
-
 )
 
 func dataSourceZabbixHost() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceZabbixHostRead,
 		Schema: map[string]*schema.Schema{
-            "host_id": &schema.Schema{
-                Type:        schema.TypeString,
+			"host_id": &schema.Schema{
+				Type:        schema.TypeString,
 				Required:    true,
-                Description: "ID of the host",
-            },
+				Description: "ID of the host",
+			},
 			"main_interface_id": &schema.Schema{
 				Type:        schema.TypeString,
 				Computed:    true,
@@ -29,6 +29,11 @@ func dataSourceZabbixHost() *schema.Resource {
 			"interfaces": &schema.Schema{
 				Type:     schema.TypeList,
 				Elem:     interfaceSchema,
+				Computed: true,
+			},
+			"tags": &schema.Schema{
+				Type:     schema.TypeMap,
+				Elem:     &schema.Schema{Type: schema.TypeString},
 				Computed: true,
 			},
 		},
@@ -49,23 +54,24 @@ func dataSourceZabbixHostRead(d *schema.ResourceData, meta interface{}) (err err
 		return err
 	}
 
-    log.Printf("[DEBUG] host interfaces =  %s", host.Interfaces)
+	interfaces_str, err := json.Marshal(host.Interfaces)
+	log.Printf("[DEBUG] host interfaces =  %s", fmt.Sprintf(string(interfaces_str)))
 
-    //d.Set("interfaces", host.Interfaces)
+	//d.Set("interfaces", host.Interfaces)
 
-    // single id
-    log.Printf("[DEBUG] testing host.Interfaces[0].InterfaceId =  %d", host.Interfaces[0].InterfaceId)
-    d.Set("main_interface_id", fmt.Sprintf("%d", host.Interfaces[0].InterfaceId))
+	// single id
+	log.Printf("[DEBUG] testing host.Interfaces[0].InterfaceId =  %d", host.Interfaces[0].InterfaceId)
+	d.Set("main_interface_id", fmt.Sprintf("%d", host.Interfaces[0].InterfaceId))
 
-    // get all interfaces
+	// get all interfaces
 	interfaceCount := len(host.Interfaces)
 	log.Printf("[DEBUG] interfaceCount =  %d", interfaceCount)
-    interfaces := make(zabbix.HostInterfaces, interfaceCount)
+	interfaces := make(zabbix.HostInterfaces, interfaceCount)
 
-    for i := 0; i < interfaceCount; i++ {
-        prefix := fmt.Sprintf("interfaces.%d.", i)
-        log.Printf("[DEBUG] Interface id =  %d", i)
-        log.Printf("[DEBUG] Prefix id =  %s", prefix)
+	for i := 0; i < interfaceCount; i++ {
+		prefix := fmt.Sprintf("interfaces.%d.", i)
+		log.Printf("[DEBUG] Interface id =  %d", i)
+		log.Printf("[DEBUG] Prefix id =  %s", prefix)
 
 		interfaces[i] = zabbix.HostInterface{
 			//IP:    ip,
@@ -75,10 +81,10 @@ func dataSourceZabbixHostRead(d *schema.ResourceData, meta interface{}) (err err
 			//Type:  typeID,
 			//UseIP: useip,
 		}
-    }
+	}
 
-    d.Set("interfaces", interfaces)
+	d.Set("interfaces", interfaces)
 
-
+	d.Set("tags", host.Tags)
 	return nil
 }

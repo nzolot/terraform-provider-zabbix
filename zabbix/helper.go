@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 func sqlError(err error) bool {
@@ -88,4 +88,18 @@ func createZabbixMacro(d *schema.ResourceData) zabbix.Macros {
 		macros = append(macros, macro)
 	}
 	return macros
+}
+
+func createZabbixTag(d *schema.ResourceData) zabbix.Tags {
+	var tags zabbix.Tags
+
+	terraformTags := d.Get("tags").(map[string]interface{})
+	for i, terraformTag := range terraformTags {
+		tag := zabbix.Tag{
+			TagName: fmt.Sprintf("%s", i),
+			Value:   terraformTag.(string),
+		}
+		tags = append(tags, tag)
+	}
+	return tags
 }

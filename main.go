@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/nzolot/terraform-provider-zabbix/zabbix"
 	"github.com/hashicorp/terraform-plugin-sdk/plugin"
+	"github.com/zxzharmlesszxz/terraform-provider-zabbix/zabbix"
 )
 
 func main() {

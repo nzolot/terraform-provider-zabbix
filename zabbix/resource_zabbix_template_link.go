@@ -3,8 +3,8 @@ package zabbix
 import (
 	"log"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 func resourceZabbixTemplateLink() *schema.Resource {

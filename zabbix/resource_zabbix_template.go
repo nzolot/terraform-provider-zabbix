@@ -5,8 +5,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 func resourceZabbixTemplate() *schema.Resource {

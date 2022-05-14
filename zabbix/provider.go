@@ -5,11 +5,11 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/logging"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/terraform"
 	"github.com/mcuadros/go-version"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 // Provider define the provider and his resources
@@ -41,7 +41,7 @@ func Provider() terraform.ResourceProvider {
 
 		DataSourcesMap: map[string]*schema.Resource{
 			"zabbix_server": dataSourceZabbixServer(),
-			"zabbix_host" : dataSourceZabbixHost(),
+			"zabbix_host":   dataSourceZabbixHost(),
 		},
 
 		ResourcesMap: map[string]*schema.Resource{

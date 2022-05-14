@@ -113,8 +113,8 @@ func resourceZabbixTriggerRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("description", trigger.Description)
 	d.Set("expression", trigger.Expression)
 
-    d.Set("recovery_mode", trigger.RecoveryMode)
-    d.Set("recovery_expression", trigger.RecoveryExpression)
+	d.Set("recovery_mode", trigger.RecoveryMode)
+	d.Set("recovery_expression", trigger.RecoveryExpression)
 
 	if trigger.Comments != "" {
 		d.Set("comment", trigger.Comments)
