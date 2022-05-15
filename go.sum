@@ -331,8 +331,8 @@ github.com/mitchellh/reflectwalk v1.0.1/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nzolot/go-zabbix-api v1.0.1-dev h1:kF3Ox6aTNTewVTNv5Zv9XmAYG84Shp3PCUBDh1XY2xI=
 github.com/nzolot/go-zabbix-api v1.0.1-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
-github.com/nzolot/go-zabbix-api v1.0.4-dev h1:X/GqcfxeNfTtgNCA3Y6pxV3bc9dhPNor/smmt77T4IY=
-github.com/nzolot/go-zabbix-api v1.0.4-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
+github.com/nzolot/go-zabbix-api v1.0.5-dev h1:F4V+NJ80I8XC9fOqeeltQhGhs0+FYw9qe2jmJr4b2tY=
+github.com/nzolot/go-zabbix-api v1.0.5-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
@@ -393,8 +393,6 @@ github.com/zclconf/go-cty-yaml v1.0.1 h1:up11wlgAaDvlAGENcFDnZgkn0qUJurso7k6EpUR
 github.com/zclconf/go-cty-yaml v1.0.1/go.mod h1:IP3Ylp0wQpYm50IHK8OZWKMu6sPJIUgKa8XhiVHura0=
 github.com/zclconf/go-cty-yaml v1.0.2 h1:dNyg4QLTrv2IfJpm7Wtxi55ed5gLGOlPrZ6kMd51hY0=
 github.com/zclconf/go-cty-yaml v1.0.2/go.mod h1:IP3Ylp0wQpYm50IHK8OZWKMu6sPJIUgKa8XhiVHura0=
-github.com/zxzharmlesszxz/go-zabbix-api v1.0.4-dev h1:OpReJWWXVY4xtrRFms7hFh9SX0cr/augEAljuY7Bhf8=
-github.com/zxzharmlesszxz/go-zabbix-api v1.0.4-dev/go.mod h1:79/WfG10DGDEk+PsZ85bwjmh7RyT9GXyOcUT7OAazHQ=
 go.opencensus.io v0.21.0/go.mod h1:mSImk1erAIZhrmZN+AvHh14ztQfjbGwt4TtuofqLduU=
 go.opencensus.io v0.22.0 h1:C9hSCOW830chIVkdja34wa6Ky+IzWllkUinR+BtRZd4=
 go.opencensus.io v0.22.0/go.mod h1:+kGneAE2xo2IficOXnaByMWTGM9T73dGwxeWcUqIpI8=
