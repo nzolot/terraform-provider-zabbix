@@ -103,3 +103,17 @@ func createZabbixTag(d *schema.ResourceData) zabbix.Tags {
 	}
 	return tags
 }
+
+func createZabbixHttpTestHeaders(d *schema.ResourceData) zabbix.Headers {
+	var headers zabbix.Headers
+
+	terraformHeaders := d.Get("headers").(map[string]interface{})
+	for i, terraformHeader := range terraformHeaders {
+		header := zabbix.Header{
+			Name:  fmt.Sprintf("%s", i),
+			Value: terraformHeader.(string),
+		}
+		headers = append(headers, header)
+	}
+	return headers
+}
