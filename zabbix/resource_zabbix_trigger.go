@@ -80,6 +80,12 @@ func resourceZabbixTrigger() *schema.Resource {
 				Optional:    true,
 				Description: "ID of the trigger it depands",
 			},
+            "tags": &schema.Schema{
+                Type:        schema.TypeMap,
+                Elem:        &schema.Schema{Type: schema.TypeString},
+                Optional:    true,
+                Description: "Tags for trigger. Support in Zabbix >=6.0",
+            },
 		},
 	}
 }
@@ -98,6 +104,7 @@ func resourceZabbixTriggerRead(d *schema.ResourceData, meta interface{}) error {
 		"selectDependencies": "extend",
 		"selectFunctions":    "extend",
 		"selectItems":        "extend",
+		"selectTags":         "extend",
 		"triggerids":         d.Id(),
 	}
 	res, err := api.TriggersGet(params)
@@ -134,6 +141,13 @@ func resourceZabbixTriggerRead(d *schema.ResourceData, meta interface{}) error {
 	}
 	log.Printf("[DEBUG] loop end dependencies: %s", dependencies)
 	d.Set("dependencies", dependencies)
+
+	terraformTags := make(map[string]interface{}, len(trigger.Tags))
+	for _, tag := range trigger.Tags {
+		terraformTags[tag.TagName] = tag.Value
+	}
+	d.Set("tags", terraformTags)
+
 	return nil
 }
 
@@ -188,6 +202,7 @@ func createTriggerObj(d *schema.ResourceData) zabbix.Trigger {
 		Priority:           zabbix.SeverityType(d.Get("priority").(int)),
 		Status:             zabbix.StatusType(d.Get("status").(int)),
 		Dependencies:       createTriggerDependencies(d),
+		Tags:               createZabbixTag(d),
 	}
 }
 

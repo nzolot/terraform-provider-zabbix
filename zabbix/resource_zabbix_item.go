@@ -117,6 +117,12 @@ func resourceZabbixItem() *schema.Resource {
 				Optional:    true,
 				Description: "Allowed hosts. Used only by trapper items.",
 			},
+            "tags": &schema.Schema{
+                Type:        schema.TypeMap,
+                Elem:        &schema.Schema{Type: schema.TypeString},
+                Optional:    true,
+                Description: "Tags for item. Support in Zabbix >=6.0",
+            },
 		},
 	}
 }
@@ -137,6 +143,7 @@ func createItemObject(d *schema.ResourceData) *zabbix.Item {
 		History:      d.Get("history").(string),
 		Trends:       d.Get("trends").(string),
 		TrapperHosts: d.Get("trapper_host").(string),
+		Tags:         createZabbixTag(d),
 	}
 
 	return &item
@@ -169,6 +176,12 @@ func resourceZabbixItemRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("history", item.History)
 	d.Set("trends", item.Trends)
 	d.Set("trapper_host", item.TrapperHosts)
+
+	terraformTags := make(map[string]interface{}, len(item.Tags))
+	for _, tag := range item.Tags {
+		terraformTags[tag.TagName] = tag.Value
+	}
+	d.Set("tags", terraformTags)
 
 	log.Printf("[DEBUG] Item name is %s\n", item.Name)
 	return nil
