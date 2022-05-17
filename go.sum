@@ -331,8 +331,8 @@ github.com/mitchellh/reflectwalk v1.0.1/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nzolot/go-zabbix-api v1.0.1-dev h1:kF3Ox6aTNTewVTNv5Zv9XmAYG84Shp3PCUBDh1XY2xI=
 github.com/nzolot/go-zabbix-api v1.0.1-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
-github.com/nzolot/go-zabbix-api v1.0.6-dev h1:KlvFuwW7kfXgj2NUJQijgZQraBY1cjqt3UGSfTh+OHo=
-github.com/nzolot/go-zabbix-api v1.0.6-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
+github.com/nzolot/go-zabbix-api v1.0.7-dev h1:KCqyOI3Eb3MSYDL4nrBpTFTcL5ZMC4iVLvqvF6RJqc8=
+github.com/nzolot/go-zabbix-api v1.0.7-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=
