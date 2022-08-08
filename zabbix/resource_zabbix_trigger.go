@@ -213,6 +213,7 @@ func getTriggerExpression(trigger *zabbix.Trigger, api *zabbix.API) error {
 		items, err := api.ItemsGet(zabbix.Params{
 			"output":      "extend",
 			"selectHosts": "extend",
+			"webitems":    "extend",
 			"itemids":     function.ItemID,
 		})
 		if err != nil {
