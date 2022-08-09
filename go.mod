@@ -1,4 +1,4 @@
-module github.com/zxzharmlesszxz/terraform-provider-zabbix
+module github.com/nzolot/terraform-provider-zabbix
 
 go 1.15
 

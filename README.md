@@ -1,4 +1,4 @@
-![Build Status](https://github.com/zxzharmlesszxz/terraform-provider-gitlab/workflows/Test%20and%20release/badge.svg)
+![Build Status](https://github.com/nzolot/terraform-provider-gitlab/workflows/Test%20and%20release/badge.svg)
 
 Terraform Provider for Zabbix
 =============================
@@ -18,21 +18,21 @@ Requirements
 Building The Provider
 ---------------------
 
-Clone repository to: `$GOPATH/src/github.com/zxzharmlesszxz/terraform-provider-zabbix`
+Clone repository to: `$GOPATH/src/github.com/nzolot/terraform-provider-zabbix`
 
 ```sh
-$ mkdir -p $GOPATH/src/github.com/zxzharmlesszxz; cd $GOPATH/src/github.com/zxzharmlesszxz
-$ git clone git@github.com:zxzharmlesszxz/terraform-provider-zabbix
+$ mkdir -p $GOPATH/src/github.com/nzolot; cd $GOPATH/src/github.com/nzolot
+$ git clone git@github.com:nzolot/terraform-provider-zabbix
 ```
 
 Enter the provider directory and build the provider
 
 ```sh
-$ cd $GOPATH/src/github.com/zxzharmlesszxz/terraform-provider-zabbix
+$ cd $GOPATH/src/github.com/nzolot/terraform-provider-zabbix
 $ make build
 ```
 
-**Note**: For contributions created from forks, the repository should still be cloned under the `$GOPATH/src/github.com/zxzharmlesszxz/terraform-provider-zabbix` directory to allow the provided `make` commands to properly run, build, and test this project.
+**Note**: For contributions created from forks, the repository should still be cloned under the `$GOPATH/src/github.com/nzolot/terraform-provider-zabbix` directory to allow the provided `make` commands to properly run, build, and test this project.
 
 Using the provider
 ------------------
