@@ -6,8 +6,8 @@ import (
 	"log"
 	"strings"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 // HostInterfaceTypes zabbix different interface type
@@ -124,6 +124,11 @@ func resourceZabbixHost() *schema.Resource {
 				Elem:        &schema.Schema{Type: schema.TypeString},
 				Optional:    true,
 				Description: "User macros for the host.",
+			},
+			"proxy_hostid": &schema.Schema{
+				Type:     schema.TypeString,
+				Optional: true,
+				Default:  "0",
 			},
 		},
 	}
@@ -291,11 +296,12 @@ func getTemplates(d *schema.ResourceData, api *zabbix.API) (zabbix.TemplateIDs, 
 
 func createHostObj(d *schema.ResourceData, api *zabbix.API) (*zabbix.Host, error) {
 	host := zabbix.Host{
-		Host:       d.Get("host").(string),
-		Name:       d.Get("name").(string),
-		Status:     0,
-		UserMacros: createZabbixMacro(d),
-		Tags:       createZabbixTag(d),
+		Host:        d.Get("host").(string),
+		Name:        d.Get("name").(string),
+		Status:      0,
+		UserMacros:  createZabbixMacro(d),
+		Tags:        createZabbixTag(d),
+		ProxyHostId: d.Get("proxy_hostid").(string),
 	}
 
 	//0 is monitored, 1 - unmonitored host
@@ -379,6 +385,8 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("host", host.Host)
 	d.Set("name", host.Name)
 
+	d.Set("proxy_hostid", host.ProxyHostId)
+
 	d.Set("monitored", host.Status == 0)
 
 	params := zabbix.Params{
@@ -425,11 +433,11 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	}
 	d.Set("tags", terraformTags)
 
-    terraformMacros, err := createTerraformMacroHost(host)
-    if err != nil {
-        return err
-    }
-    d.Set("macro", terraformMacros)
+	terraformMacros, err := createTerraformMacroHost(host)
+	if err != nil {
+		return err
+	}
+	d.Set("macro", terraformMacros)
 
 	return nil
 }

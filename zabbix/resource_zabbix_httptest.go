@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 var stepsSchema *schema.Resource = &schema.Resource{
@@ -14,27 +14,27 @@ var stepsSchema *schema.Resource = &schema.Resource{
 			Type:     schema.TypeString,
 			Required: true,
 		},
-        "order": &schema.Schema{
-            Type:     schema.TypeString,
-            Required: true,
-        },
-        "url": &schema.Schema{
-            Type:     schema.TypeString,
-            Required: true,
-        },
-        "status_codes": &schema.Schema{
-            Type:     schema.TypeString,
-            Optional: true,
-        },
-        "search_string": &schema.Schema{
-            Type:     schema.TypeString,
-            Optional:    true,
-        },
-        "headers": &schema.Schema{
-            Type:        schema.TypeMap,
-            Elem:        &schema.Schema{Type: schema.TypeString},
-            Optional:    true,
-        },
+		"order": &schema.Schema{
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"url": &schema.Schema{
+			Type:     schema.TypeString,
+			Required: true,
+		},
+		"status_codes": &schema.Schema{
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"search_string": &schema.Schema{
+			Type:     schema.TypeString,
+			Optional: true,
+		},
+		"headers": &schema.Schema{
+			Type:     schema.TypeMap,
+			Elem:     &schema.Schema{Type: schema.TypeString},
+			Optional: true,
+		},
 	},
 }
 
@@ -57,13 +57,13 @@ func resourceZabbixHttpTest() *schema.Resource {
 				Type:        schema.TypeString,
 				Required:    true,
 				Description: "ID of the host or template that the httptest belongs to.",
-				ForceNew: true,
+				ForceNew:    true,
 			},
 			"httptest_id": &schema.Schema{
 				Type:        schema.TypeString,
 				Computed:    true,
 				Description: "ID of the web check",
-				ForceNew: true,
+				ForceNew:    true,
 			},
 			"delay": &schema.Schema{
 				Type:        schema.TypeString,
@@ -106,7 +106,7 @@ func resourceZabbixHttpTestCreate(d *schema.ResourceData, meta interface{}) erro
 }
 
 func createHttpTest(httptest interface{}, api *zabbix.API) (id string, err error) {
- 	httptests := zabbix.HttpTests{httptest.(zabbix.HttpTest)}
+	httptests := zabbix.HttpTests{httptest.(zabbix.HttpTest)}
 
 	err = api.HttpTestsCreate(httptests)
 	if err != nil {
@@ -117,22 +117,22 @@ func createHttpTest(httptest interface{}, api *zabbix.API) (id string, err error
 }
 
 func createHttpTestObj(d *schema.ResourceData) (zabbix.HttpTest, error) {
-    httptest :=  zabbix.HttpTest{
-	    HttpTestID: d.Get("httptest_id").(string),
-	    Name  :     d.Get("name").(string),
-	    HostID:     d.Get("host_id").(string),
-	    Delay:      d.Get("delay").(string),
-        Retries:    d.Get("retries").(string),
-        Headers:    createZabbixHttpTestHeaders(d),
+	httptest := zabbix.HttpTest{
+		HttpTestID: d.Get("httptest_id").(string),
+		Name:       d.Get("name").(string),
+		HostID:     d.Get("host_id").(string),
+		Delay:      d.Get("delay").(string),
+		Retries:    d.Get("retries").(string),
+		Headers:    createZabbixHttpTestHeaders(d),
 	}
 
 	steps, err := createStepsObj(d)
 	if err != nil {
 		return zabbix.HttpTest{}, err
 	}
-    httptest.Steps = steps
+	httptest.Steps = steps
 
-    return httptest, nil
+	return httptest, nil
 }
 
 func createStepsObj(d *schema.ResourceData) (zabbix.Steps, error) {
@@ -143,30 +143,29 @@ func createStepsObj(d *schema.ResourceData) (zabbix.Steps, error) {
 	for i := 0; i < stepsCount; i++ {
 		prefix := fmt.Sprintf("steps.%d.", i)
 		steps[i] = zabbix.Step{
-            Name:    d.Get(prefix + "name").(string),
-            No:      d.Get(prefix + "order").(string),
-            Url:     d.Get(prefix + "url").(string),
+			Name: d.Get(prefix + "name").(string),
+			No:   d.Get(prefix + "order").(string),
+			Url:  d.Get(prefix + "url").(string),
 
-            StatusCodes: d.Get(prefix + "status_codes").(string),
-            RequiredStr: d.Get(prefix + "search_string").(string),
+			StatusCodes: d.Get(prefix + "status_codes").(string),
+			RequiredStr: d.Get(prefix + "search_string").(string),
 		}
 
-        headers := zabbix.Headers{}
+		headers := zabbix.Headers{}
 		terraformHeaders := d.Get(prefix + "headers").(map[string]interface{})
-        for i, terraformHeader := range terraformHeaders {
-            header := zabbix.Header{
-                Name:  fmt.Sprintf("%s", i),
-                Value: terraformHeader.(string),
-            }
-            headers = append(headers, header)
-        }
-        steps[i].Headers = headers
+		for i, terraformHeader := range terraformHeaders {
+			header := zabbix.Header{
+				Name:  fmt.Sprintf("%s", i),
+				Value: terraformHeader.(string),
+			}
+			headers = append(headers, header)
+		}
+		steps[i].Headers = headers
 
 	}
 
 	return steps, nil
 }
-
 
 func resourceZabbixHttpTestRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*zabbix.API)
@@ -176,17 +175,16 @@ func resourceZabbixHttpTestRead(d *schema.ResourceData, meta interface{}) error 
 		return err
 	}
 
-	d.Set("name",        httptest.Name)
-	d.Set("host_id",     httptest.HostID)
+	d.Set("name", httptest.Name)
+	d.Set("host_id", httptest.HostID)
 	d.Set("httptest_id", httptest.HttpTestID)
-	d.Set("retries",     httptest.Retries)
-	d.Set("delay",       httptest.Delay)
-	d.Set("steps",       httptest.Steps)
+	d.Set("retries", httptest.Retries)
+	d.Set("delay", httptest.Delay)
+	d.Set("steps", httptest.Steps)
 
 	log.Printf("[DEBUG] httptest name is %s\n", httptest.Name)
 	return nil
 }
-
 
 // Update
 func resourceZabbixHttpTestUpdate(d *schema.ResourceData, meta interface{}) error {
@@ -201,7 +199,7 @@ func resourceZabbixHttpTestUpdate(d *schema.ResourceData, meta interface{}) erro
 }
 
 func updateHttpTest(httptest interface{}, api *zabbix.API) (id string, err error) {
- 	httptests := zabbix.HttpTests{httptest.(zabbix.HttpTest)}
+	httptests := zabbix.HttpTests{httptest.(zabbix.HttpTest)}
 
 	err = api.HttpTestsUpdate(httptests)
 	if err != nil {
@@ -210,7 +208,6 @@ func updateHttpTest(httptest interface{}, api *zabbix.API) (id string, err error
 	id = httptests[0].HttpTestID
 	return
 }
-
 
 // Delete
 func resourceZabbixHttpTestDelete(d *schema.ResourceData, meta interface{}) error {

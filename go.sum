@@ -34,6 +34,8 @@ cloud.google.com/go/storage v1.8.0/go.mod h1:Wv1Oy7z6Yz3DshWRJFhqM/UCfaWIRTdp0RX
 cloud.google.com/go/storage v1.10.0 h1:STgFzyU5/8miMl0//zKh2aQeTyeaUH3WN9bSUiJ09bA=
 cloud.google.com/go/storage v1.10.0/go.mod h1:FLPqc6j+Ki4BU591ie1oL6qBQGu2Bl/tZ9ullr3+Kg0=
 dmitri.shuralyov.com/gpu/mtl v0.0.0-20190408044501-666a987793e9/go.mod h1:H6x//7gZCb22OMCxBHrMx7a5I7Hp++hsVxbQ4BYO7hU=
+github.com/AlekSi/reflector v0.4.1 h1:onP7kPCAV/EXgHwKz1PyU9K/udpVJ8dVcOMm4brKrJ4=
+github.com/AlekSi/reflector v0.4.1/go.mod h1:K9Yt9Jbte9Xw4QZ3e/ovaWduyRSlKVmwnze4z3+bVxs=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/BurntSushi/xgb v0.0.0-20160522181843-27f122750802/go.mod h1:IVnqGOEym/WlBOVXweHU+Q+/VP0lqqI8lqeDx9IjBqo=
 github.com/Masterminds/goutils v1.1.0 h1:zukEsf/1JZwCMgHiK3GZftabmxiCw4apj3a28RPBiVg=
@@ -331,8 +333,8 @@ github.com/mitchellh/reflectwalk v1.0.1/go.mod h1:mSTlrgnPZtwu0c4WaC2kGObEpuNDbx
 github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLANZcx1PVRCS0qkT7pwLkGfwJo4zjcN/Tysno=
 github.com/nzolot/go-zabbix-api v1.0.1-dev h1:kF3Ox6aTNTewVTNv5Zv9XmAYG84Shp3PCUBDh1XY2xI=
 github.com/nzolot/go-zabbix-api v1.0.1-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
-github.com/nzolot/go-zabbix-api v1.0.7-dev h1:KCqyOI3Eb3MSYDL4nrBpTFTcL5ZMC4iVLvqvF6RJqc8=
-github.com/nzolot/go-zabbix-api v1.0.7-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
+github.com/nzolot/go-zabbix-api v1.0.8-dev h1:BbOoSShdvUaWgmGDhpOpp5mPjPBaYeNaH6DmD+NIgeQ=
+github.com/nzolot/go-zabbix-api v1.0.8-dev/go.mod h1:Oyg4kMCMjC54odMyo9LnHgOXKSLiQUN6eRU8LWyaCjc=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=

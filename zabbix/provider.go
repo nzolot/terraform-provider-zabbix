@@ -55,6 +55,7 @@ func Provider() terraform.ResourceProvider {
 			"zabbix_item_prototype":    resourceZabbixItemPrototype(),
 			"zabbix_trigger_prototype": resourceZabbixTriggerPrototype(),
 			"zabbix_web_check":         resourceZabbixHttpTest(),
+			"zabbix_proxy":             resourceZabbixProxy(),
 		},
 	}
 

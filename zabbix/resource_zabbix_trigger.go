@@ -5,9 +5,9 @@ import (
 	"log"
 	"strings"
 
-	"github.com/nzolot/go-zabbix-api"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/mcuadros/go-version"
+	"github.com/nzolot/go-zabbix-api"
 )
 
 func resourceZabbixTrigger() *schema.Resource {
@@ -80,12 +80,12 @@ func resourceZabbixTrigger() *schema.Resource {
 				Optional:    true,
 				Description: "ID of the trigger it depands",
 			},
-            "tags": &schema.Schema{
-                Type:        schema.TypeMap,
-                Elem:        &schema.Schema{Type: schema.TypeString},
-                Optional:    true,
-                Description: "Tags for trigger. Support in Zabbix >=6.0",
-            },
+			"tags": &schema.Schema{
+				Type:        schema.TypeMap,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "Tags for trigger. Support in Zabbix >=6.0",
+			},
 		},
 	}
 }
@@ -228,18 +228,18 @@ func getTriggerExpression(trigger *zabbix.Trigger, api *zabbix.API) error {
 		}
 		idstr := fmt.Sprintf("{%s}", function.FunctionID)
 
-        apiVersion, err := api.Version()
-        log.Printf("[DEBUG] apiVersion: %s", apiVersion)
+		apiVersion, err := api.Version()
+		log.Printf("[DEBUG] apiVersion: %s", apiVersion)
 
-        if version.Compare(apiVersion, "5.4", ">=") {
-            expendValue := fmt.Sprintf("%s(%s)", function.Function, strings.Replace(function.Parameter, "$", "/" + item.ItemParent[0].Host + "/" + item.Key, 1))
-            trigger.Expression = strings.ReplaceAll(trigger.Expression, idstr, expendValue)
-            trigger.RecoveryExpression = strings.ReplaceAll(trigger.RecoveryExpression, idstr, expendValue)
-        } else {
-            expendValue := fmt.Sprintf("{%s:%s.%s(%s)}", item.ItemParent[0].Host, item.Key, function.Function, function.Parameter)
-            trigger.Expression = strings.ReplaceAll(trigger.Expression, idstr, expendValue)
-            trigger.RecoveryExpression = strings.ReplaceAll(trigger.RecoveryExpression, idstr, expendValue)
-        }
+		if version.Compare(apiVersion, "5.4", ">=") {
+			expendValue := fmt.Sprintf("%s(%s)", function.Function, strings.Replace(function.Parameter, "$", "/"+item.ItemParent[0].Host+"/"+item.Key, 1))
+			trigger.Expression = strings.ReplaceAll(trigger.Expression, idstr, expendValue)
+			trigger.RecoveryExpression = strings.ReplaceAll(trigger.RecoveryExpression, idstr, expendValue)
+		} else {
+			expendValue := fmt.Sprintf("{%s:%s.%s(%s)}", item.ItemParent[0].Host, item.Key, function.Function, function.Parameter)
+			trigger.Expression = strings.ReplaceAll(trigger.Expression, idstr, expendValue)
+			trigger.RecoveryExpression = strings.ReplaceAll(trigger.RecoveryExpression, idstr, expendValue)
+		}
 	}
 	return nil
 }

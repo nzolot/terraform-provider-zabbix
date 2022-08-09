@@ -117,12 +117,12 @@ func resourceZabbixItem() *schema.Resource {
 				Optional:    true,
 				Description: "Allowed hosts. Used only by trapper items.",
 			},
-            "tags": &schema.Schema{
-                Type:        schema.TypeMap,
-                Elem:        &schema.Schema{Type: schema.TypeString},
-                Optional:    true,
-                Description: "Tags for item. Support in Zabbix >=6.0",
-            },
+			"tags": &schema.Schema{
+				Type:        schema.TypeMap,
+				Elem:        &schema.Schema{Type: schema.TypeString},
+				Optional:    true,
+				Description: "Tags for item. Support in Zabbix >=6.0",
+			},
 		},
 	}
 }
