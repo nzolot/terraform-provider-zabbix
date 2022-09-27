@@ -392,7 +392,6 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	params := zabbix.Params{
 		"output":           "extend",
 		"selectMacros":     "extend",
-		"selectInterfaces": "extend",
 		"selectTags":       "extend",
 		"hostids": []string{
 			d.Id(),
