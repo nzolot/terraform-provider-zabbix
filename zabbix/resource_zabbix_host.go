@@ -389,16 +389,14 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("monitored", host.Status == 0)
 
-	params := zabbix.Params{
-		"output":           "extend",
-		"selectMacros":     "extend",
-		"selectTags":       "extend",
+	templates, err := api.TemplatesGet(zabbix.Params{
+		"output":       "extend",
+		"selectMacros": "extend",
+		"selectTags":   "extend",
 		"hostids": []string{
 			d.Id(),
 		},
-	}
-
-	templates, err := api.TemplatesGet(params)
+	})
 
 	if err != nil {
 		return err
@@ -412,7 +410,12 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 
 	d.Set("templates", templateNames)
 
-	groups, err := api.HostGroupsGet(params)
+	groups, err := api.HostGroupsGet(zabbix.Params{
+		"output":       "extend",
+		"hostids": []string{
+			d.Id(),
+		},
+	})
 
 	if err != nil {
 		return err
