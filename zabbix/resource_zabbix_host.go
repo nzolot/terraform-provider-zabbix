@@ -18,43 +18,6 @@ var HostInterfaceTypes = map[string]zabbix.InterfaceType{
 	"jmx":   4,
 }
 
-var interfaceSchema *schema.Resource = &schema.Resource{
-	Schema: map[string]*schema.Schema{
-		"dns": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			//ForceNew: true,
-		},
-		"ip": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			//ForceNew: true,
-		},
-		"main": &schema.Schema{
-			Type:     schema.TypeBool,
-			Required: true,
-			ForceNew: true,
-		},
-		"port": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "10050",
-			//ForceNew: true,
-		},
-		"type": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "agent",
-			ForceNew: true,
-		},
-		"interface_id": &schema.Schema{
-			Type:     schema.TypeString,
-			Computed: true,
-			ForceNew: true,
-		},
-	},
-}
-
 func createTerraformTag(host *zabbix.Host) (map[string]interface{}, error) {
 	terraformTags := make(map[string]interface{}, len(host.Tags))
 
@@ -411,7 +374,7 @@ func resourceZabbixHostRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("templates", templateNames)
 
 	groups, err := api.HostGroupsGet(zabbix.Params{
-		"output":       "extend",
+		"output": "extend",
 		"hostids": []string{
 			d.Id(),
 		},

@@ -49,6 +49,18 @@ func resourceZabbixLLDRule() *schema.Resource {
 				Elem:     schemaLLDRuleFilter(),
 				Required: true,
 			},
+			"preprocessing": &schema.Schema{
+				Type:        schema.TypeList,
+				Elem:        itemPreprocessingSchema,
+				Optional:    true,
+				Description: "Item preprocessing options. Support in Zabbix >=4.0 https://www.zabbix.com/documentation/current/en/manual/api/reference/item/object#item-preprocessing",
+			},
+			"lld_macros": &schema.Schema{
+				Type:        schema.TypeList,
+				Elem:        LLDMacroPathsSchema,
+				Optional:    true,
+				Description: "Item preprocessing options. Support in Zabbix >=4.0 https://www.zabbix.com/documentation/current/en/manual/api/reference/item/object#item-preprocessing",
+			},
 		},
 	}
 }
@@ -103,10 +115,12 @@ func resourceZabbixLLDRuleCreate(d *schema.ResourceData, meta interface{}) error
 func resourceZabbixLLDRuleRead(d *schema.ResourceData, meta interface{}) error {
 	api := meta.(*zabbix.API)
 	params := zabbix.Params{
-		"itemids":      d.Id(),
-		"output":       "extend",
-		"selectFilter": "extend",
-		"inherited":    false,
+		"itemids":             d.Id(),
+		"output":              "extend",
+		"selectFilter":        "extend",
+		"selectPreprocessing": "extend",
+		"selectLLDMacroPaths": "extend",
+		"inherited":           false,
 	}
 
 	lldRules, err := api.DiscoveryRulesGet(params)
@@ -141,6 +155,9 @@ func resourceZabbixLLDRuleRead(d *schema.ResourceData, meta interface{}) error {
 	filter["formula"] = lldRule.Filter.Formula
 
 	d.Set("filter", []interface{}{filter})
+
+	d.Set("preprocessing", lldRule.PreProcs)
+	d.Set("lld_macros", lldRule.LLDMacroPaths)
 	return nil
 }
 
@@ -174,13 +191,15 @@ func resourceZabbixLLDRuleDelete(d *schema.ResourceData, meta interface{}) error
 
 func createLLDRuleObject(d *schema.ResourceData) zabbix.LLDRule {
 	return zabbix.LLDRule{
-		Delay:       d.Get("delay").(string),
-		HostID:      d.Get("host_id").(string),
-		InterfaceID: d.Get("interface_id").(string),
-		Key:         d.Get("key").(string),
-		Name:        d.Get("name").(string),
-		Type:        zabbix.ItemType(d.Get("type").(int)),
-		Filter:      createLLDRuleConditionObject(d),
+		Delay:         d.Get("delay").(string),
+		HostID:        d.Get("host_id").(string),
+		InterfaceID:   d.Get("interface_id").(string),
+		Key:           d.Get("key").(string),
+		Name:          d.Get("name").(string),
+		Type:          zabbix.ItemType(d.Get("type").(int)),
+		Filter:        createLLDRuleConditionObject(d),
+		PreProcs:      createZabbixItemPreProcs(d),
+		LLDMacroPaths: createZabbixLLDMacroPaths(d),
 	}
 }
 

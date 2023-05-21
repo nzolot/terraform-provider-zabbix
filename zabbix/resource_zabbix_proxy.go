@@ -8,31 +8,6 @@ import (
 	"log"
 )
 
-var proxyInterfaceSchema *schema.Resource = &schema.Resource{
-	Schema: map[string]*schema.Schema{
-		"dns": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "",
-		},
-		"ip": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "",
-		},
-		"port": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "10050",
-		},
-		"useip": &schema.Schema{
-			Type:     schema.TypeString,
-			Optional: true,
-			Default:  "1",
-		},
-	},
-}
-
 func resourceZabbixProxy() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceZabbixProxyCreate,

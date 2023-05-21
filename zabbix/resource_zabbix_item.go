@@ -23,6 +23,7 @@ func resourceZabbixItem() *schema.Resource {
 			"delay": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
+				Default:  "0",
 			},
 			"host_id": &schema.Schema{
 				Type:        schema.TypeString,
@@ -50,7 +51,7 @@ func resourceZabbixItem() *schema.Resource {
 				Default:  0,
 				ValidateFunc: func(val interface{}, key string) (warns []string, errs []error) {
 					v := val.(int)
-					if v < 0 || v > 16 {
+					if v < 0 || v > 21 {
 						errs = append(errs, fmt.Errorf("%q, must be between 0 and 16 inclusive, got %d", key, v))
 					}
 					return
@@ -123,6 +124,24 @@ func resourceZabbixItem() *schema.Resource {
 				Optional:    true,
 				Description: "Tags for item. Support in Zabbix >=6.0",
 			},
+			"preprocessing": &schema.Schema{
+				Type:        schema.TypeList,
+				Elem:        itemPreprocessingSchema,
+				Optional:    true,
+				Description: "Item preprocessing options. Support in Zabbix >=4.0 https://www.zabbix.com/documentation/current/en/manual/api/reference/item/object#item-preprocessing",
+			},
+			"master_itemid": &schema.Schema{
+				Type:        schema.TypeString,
+				Optional:    true,
+				Description: "Master item ID. Recursion up to 3 dependent items and maximum count of dependent items equal to 29999 are allowed.",
+				Default:     "0",
+			},
+			"status": &schema.Schema{
+				Type:        schema.TypeInt,
+				Optional:    true,
+				Default:     "0",
+				Description: "Status of the item.",
+			},
 		},
 	}
 }
@@ -144,6 +163,9 @@ func createItemObject(d *schema.ResourceData) *zabbix.Item {
 		Trends:       d.Get("trends").(string),
 		TrapperHosts: d.Get("trapper_host").(string),
 		Tags:         createZabbixTag(d),
+		PreProcs:     createZabbixItemPreProcs(d),
+		MasterItem:   d.Get("master_itemid").(string),
+		Status:       d.Get("status").(int),
 	}
 
 	return &item
@@ -176,6 +198,9 @@ func resourceZabbixItemRead(d *schema.ResourceData, meta interface{}) error {
 	d.Set("history", item.History)
 	d.Set("trends", item.Trends)
 	d.Set("trapper_host", item.TrapperHosts)
+	d.Set("preprocessing", item.PreProcs)
+	d.Set("master_itemid", item.MasterItem)
+	d.Set("status", item.Status)
 
 	terraformTags := make(map[string]interface{}, len(item.Tags))
 	for _, tag := range item.Tags {

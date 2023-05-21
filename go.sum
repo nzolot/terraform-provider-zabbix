@@ -335,6 +335,8 @@ github.com/nzolot/go-zabbix-api v1.0.1-dev h1:kF3Ox6aTNTewVTNv5Zv9XmAYG84Shp3PCU
 github.com/nzolot/go-zabbix-api v1.0.1-dev/go.mod h1:0FndkxkFy9p+ZLJJ8f7yAta2RaLUxC92iX+mACf0tP0=
 github.com/nzolot/go-zabbix-api v1.0.8-dev h1:BbOoSShdvUaWgmGDhpOpp5mPjPBaYeNaH6DmD+NIgeQ=
 github.com/nzolot/go-zabbix-api v1.0.8-dev/go.mod h1:Oyg4kMCMjC54odMyo9LnHgOXKSLiQUN6eRU8LWyaCjc=
+github.com/nzolot/go-zabbix-api v1.0.9-dev h1:4kvijxlrpXV0qIo7cALfbmFU64Lt929ntTSPYnWNBww=
+github.com/nzolot/go-zabbix-api v1.0.9-dev/go.mod h1:Oyg4kMCMjC54odMyo9LnHgOXKSLiQUN6eRU8LWyaCjc=
 github.com/oklog/run v1.0.0 h1:Ru7dDtJNOyC66gQ5dQmaCa0qIsAUFY3sFpK1Xk8igrw=
 github.com/oklog/run v1.0.0/go.mod h1:dlhp/R75TPv97u0XWUtDeV/lRKWPKSdTuV0TZvrmrQA=
 github.com/pierrec/lz4 v2.0.5+incompatible/go.mod h1:pdkljMzZIN41W+lC3N2tnIh5sFi+IEE17M5jbnwPHcY=

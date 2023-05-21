@@ -104,6 +104,36 @@ func createZabbixTag(d *schema.ResourceData) zabbix.Tags {
 	return tags
 }
 
+func createZabbixItemPreProcs(d *schema.ResourceData) zabbix.PreProcs {
+	var preprocs zabbix.PreProcs
+
+	terraformItemPreProcs := d.Get("preprocessing").([]interface{})
+	for _, terraformItemPreProc := range terraformItemPreProcs {
+		preproc := zabbix.PreProc{
+			Type:               fmt.Sprintf("%d", terraformItemPreProc.(map[string]interface{})["type"]),
+			Params:             fmt.Sprintf("%v", terraformItemPreProc.(map[string]interface{})["params"]),
+			ErrorHandler:       fmt.Sprintf("%d", terraformItemPreProc.(map[string]interface{})["error_handler"]),
+			ErrorHandlerParams: fmt.Sprintf("%v", terraformItemPreProc.(map[string]interface{})["error_handler_params"]),
+		}
+		preprocs = append(preprocs, preproc)
+	}
+	return preprocs
+}
+
+func createZabbixLLDMacroPaths(d *schema.ResourceData) zabbix.LLDMacroPaths {
+	var macropaths zabbix.LLDMacroPaths
+
+	terraformLLDMacroPaths := d.Get("lld_macros").([]interface{})
+	for _, terraformLLDMacroPath := range terraformLLDMacroPaths {
+		macropath := zabbix.LLDMacroPath{
+			Macro: fmt.Sprintf("%s", terraformLLDMacroPath.(map[string]interface{})["macro"]),
+			Path:  fmt.Sprintf("%s", terraformLLDMacroPath.(map[string]interface{})["path"]),
+		}
+		macropaths = append(macropaths, macropath)
+	}
+	return macropaths
+}
+
 func createZabbixHttpTestHeaders(d *schema.ResourceData) zabbix.Headers {
 	var headers zabbix.Headers
 
